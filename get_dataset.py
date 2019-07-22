@@ -2,7 +2,7 @@ import os
 import shutil
 import json
 
-from utils import download_file, extract_file, copy_directory
+from utils import download_file, extract_file, copy_directory, remove_inner_ear_landmarks
 
 with open('config.json', 'r') as f:
     config = json.load(f)
@@ -47,4 +47,23 @@ for subdir in config['remove']:
         path_to = os.path.join(removed_path, subdir + '_' + filename)
         os.rename(path_from, path_to)
         os.rename(path_from + '.cat', path_to + '.cat')
+print('done.')
+
+# Remove landmarks 3, 5, 6, 8 (zero-based) - 2 inner points of each ear
+print('Removing inner ear landmarks...')
+cnt = 0
+total = sum([len([f for f in os.listdir(os.path.join(clean_path, subdir)) if f.endswith('.cat')])
+             for subdir in os.listdir(clean_path)])
+for i_subdir, subdir in enumerate(os.listdir(clean_path)):
+    subdir_path = os.path.join(clean_path, subdir)
+    for filename in os.listdir(subdir_path):
+        if filename.endswith('.cat'):
+            file_path = os.path.join(subdir_path, filename)
+            remove_inner_ear_landmarks(file_path)
+            cnt += 1
+            if not cnt % 100:
+                percent = cnt / total * 100
+                print('\r%.2f%% of %d' % (percent, total), end='')
+print('\r100.00%% of %d' % total)
+
 print('done.')

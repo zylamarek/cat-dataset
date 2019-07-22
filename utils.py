@@ -83,3 +83,14 @@ def copy_directory(src, dst):
                 print('\r%.2f%% of %.2fMB' % (percent, total / 1024 / 1024), end='')
 
     print('\r100.00%% of %.2fMB' % (total / 1024 / 1024))
+
+
+def remove_inner_ear_landmarks(file_path):
+    with open(file_path, 'r') as cat_file:
+        landmarks = cat_file.readline().split()
+    del (landmarks[17:])
+    del (landmarks[11:15])
+    del (landmarks[7:9])
+    landmarks[0] = '5'
+    with open(file_path, 'w') as cat_file:
+        cat_file.write(' '.join(landmarks))
