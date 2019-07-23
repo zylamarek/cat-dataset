@@ -3,6 +3,7 @@ import zipfile
 import os
 import shutil
 import hashlib
+from PIL import Image
 
 
 def download_file(url, file_path, checksum):
@@ -94,3 +95,37 @@ def remove_inner_ear_landmarks(file_path):
     landmarks[0] = '5'
     with open(file_path, 'w') as cat_file:
         cat_file.write(' '.join(landmarks))
+
+
+def resize_image(img, landmarks, size, sampling_method):
+    old_size = img.size
+    if old_size != (size, size):
+        ratio = float(size) / max(old_size)
+        new_size = tuple([int(x * ratio) for x in old_size])
+        old_img = img.resize(new_size, sampling_method)
+        img = Image.new('RGB', (size, size))
+        x_diff = (size - new_size[0]) // 2
+        y_diff = (size - new_size[1]) // 2
+        img.paste(old_img, (x_diff, y_diff))
+
+        landmarks[1:] = [int(round(l * ratio)) for l in landmarks[1:]]
+        landmarks[1::2] = [l + x_diff for l in landmarks[1::2]]
+        landmarks[2::2] = [l + y_diff for l in landmarks[2::2]]
+
+    return img, landmarks
+
+
+def crop_and_resize_image(file_path, bounding_box, size):
+    img = Image.open(file_path)
+    file_path_cat = file_path + '.cat'
+    with open(file_path_cat, 'r') as cat_file:
+        landmarks = [int(v) for v in cat_file.readline().split()]
+
+    landmarks[1::2] = [v - bounding_box[0] for v in landmarks[1::2]]
+    landmarks[2::2] = [v - bounding_box[1] for v in landmarks[2::2]]
+    img = img.crop(bounding_box)
+    img, landmarks = resize_image(img, landmarks, size, Image.LANCZOS)
+
+    img.save(file_path, format='jpeg')
+    with open(file_path_cat, 'w') as cat_file:
+        cat_file.write(' '.join(['%d' % v for v in landmarks]))

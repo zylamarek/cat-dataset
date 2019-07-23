@@ -2,7 +2,7 @@ import os
 import shutil
 import json
 
-from utils import download_file, extract_file, copy_directory, remove_inner_ear_landmarks
+from utils import download_file, extract_file, copy_directory, remove_inner_ear_landmarks, crop_and_resize_image
 
 with open('config.json', 'r') as f:
     config = json.load(f)
@@ -90,6 +90,34 @@ for subset in config['split']:
                     print('\r%.2f%% of %d' % (percent, total), end='')
         if operation == 'move':
             shutil.rmtree(subdir_path, ignore_errors=True)
+print('\r100.00%% of %d' % total)
+
+# Crop images in validation and test datasets to obtain uniformly distributed scales
+print('Cropping and resizing subsets...')
+cnt = 0
+total = sum([len(l) for l in config['crop'].values()])
+for subdir in config['crop']:
+    for filename, bounding_box in config['crop'][subdir].items():
+        file_path = os.path.join(clean_path, subdir, filename)
+        crop_and_resize_image(file_path, bounding_box, config['img_size'])
+        cnt += 1
+        if not cnt % 10:
+            percent = cnt / total * 100
+            print('\r%.2f%% of %d' % (percent, total), end='')
+print('\r100.00%% of %d' % total)
+
+# Crop images in validation and test datasets for landmarks in ROI detection
+print('Cropping and resizing landmarks subsets...')
+cnt = 0
+total = sum([len(l) for l in config['crop_landmarks'].values()])
+for subdir in config['crop_landmarks']:
+    for filename, bounding_box in config['crop_landmarks'][subdir].items():
+        file_path = os.path.join(clean_path, subdir, filename)
+        crop_and_resize_image(file_path, bounding_box, config['img_size'])
+        cnt += 1
+        if not cnt % 10:
+            percent = cnt / total * 100
+            print('\r%.2f%% of %d' % (percent, total), end='')
 print('\r100.00%% of %d' % total)
 
 print('done.')
