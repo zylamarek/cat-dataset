@@ -450,5 +450,41 @@
       "00001418_015.jpg",
       "00001490_028.jpg"
     ]
+  },
+  "split": {
+    "training": {
+      "subdirs": [
+        "CAT_00",
+        "CAT_01",
+        "CAT_02",
+        "CAT_03",
+        "CAT_04"
+      ],
+      "operation": "move"
+    },
+    "validation": {
+      "subdirs": [
+        "CAT_05"
+      ],
+      "operation": "copy"
+    },
+    "test": {
+      "subdirs": [
+        "CAT_06"
+      ],
+      "operation": "copy"
+    },
+    "landmarks_validation": {
+      "subdirs": [
+        "CAT_05"
+      ],
+      "operation": "move"
+    },
+    "landmarks_test": {
+      "subdirs": [
+        "CAT_06"
+      ],
+      "operation": "move"
+    }
   }
 }

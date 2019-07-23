@@ -66,4 +66,30 @@ for i_subdir, subdir in enumerate(os.listdir(clean_path)):
                 print('\r%.2f%% of %d' % (percent, total), end='')
 print('\r100.00%% of %d' % total)
 
+print('Splitting data into training/validation/test sets...')
+cnt = 0
+total = sum([len([fn for fn in os.listdir(os.path.join(clean_path, subdir)) if fn[-4:] in ('.cat', '.jpg')])
+             for subset in config['split'] for subdir in config['split'][subset]['subdirs']])
+for subset in config['split']:
+    subset_path = os.path.join(clean_path, subset)
+    os.makedirs(subset_path)
+    for i_subdir, subdir in enumerate(config['split'][subset]['subdirs']):
+        subdir_path = os.path.join(clean_path, subdir)
+        operation = config['split'][subset]['operation']
+        for filename in os.listdir(subdir_path):
+            if filename[-4:] in ('.cat', '.jpg'):
+                file_path = os.path.join(subdir_path, filename)
+                file_path_subset = os.path.join(subset_path, subdir + '_' + filename)
+                if operation == 'move':
+                    os.rename(file_path, file_path_subset)
+                elif operation == 'copy':
+                    shutil.copyfile(file_path, file_path_subset)
+                cnt += 1
+                if not cnt % 100:
+                    percent = cnt / total * 100
+                    print('\r%.2f%% of %d' % (percent, total), end='')
+        if operation == 'move':
+            shutil.rmtree(subdir_path, ignore_errors=True)
+print('\r100.00%% of %d' % total)
+
 print('done.')
