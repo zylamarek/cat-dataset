@@ -99,7 +99,7 @@ total = sum([len(l) for l in config['crop'].values()])
 for subdir in config['crop']:
     for filename, bounding_box in config['crop'][subdir].items():
         file_path = os.path.join(clean_path, subdir, filename)
-        crop_and_resize_image(file_path, bounding_box, config['img_size'])
+        crop_and_resize_image(file_path, bounding_box, config['img_size'], 'jpeg')
         cnt += 1
         if not cnt % 10:
             percent = cnt / total * 100
@@ -113,7 +113,7 @@ total = sum([len(l) for l in config['crop_landmarks'].values()])
 for subdir in config['crop_landmarks']:
     for filename, bounding_box in config['crop_landmarks'][subdir].items():
         file_path = os.path.join(clean_path, subdir, filename)
-        crop_and_resize_image(file_path, bounding_box, config['img_size'])
+        crop_and_resize_image(file_path, bounding_box, config['img_size'], 'bmp')
         cnt += 1
         if not cnt % 10:
             percent = cnt / total * 100

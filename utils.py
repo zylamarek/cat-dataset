@@ -115,7 +115,7 @@ def resize_image(img, landmarks, size, sampling_method):
     return img, landmarks
 
 
-def crop_and_resize_image(file_path, bounding_box, size):
+def crop_and_resize_image(file_path, bounding_box, size, format):
     img = Image.open(file_path)
     file_path_cat = file_path + '.cat'
     with open(file_path_cat, 'r') as cat_file:
@@ -126,6 +126,17 @@ def crop_and_resize_image(file_path, bounding_box, size):
     img = img.crop(bounding_box)
     img, landmarks = resize_image(img, landmarks, size, Image.LANCZOS)
 
-    img.save(file_path, format='jpeg')
-    with open(file_path_cat, 'w') as cat_file:
-        cat_file.write(' '.join(['%d' % v for v in landmarks]))
+    if format == 'bmp':
+        file_path_bmp = file_path[:-3] + 'bmp'
+        file_path_bmp_cat = file_path_bmp + '.cat'
+        img.save(file_path_bmp, format='bmp')
+        with open(file_path_bmp_cat, 'w') as cat_file:
+            cat_file.write(' '.join(['%d' % v for v in landmarks]))
+        os.remove(file_path)
+        os.remove(file_path_cat)
+    elif format == 'jpeg':
+        img.save(file_path, format='jpeg')
+        with open(file_path_cat, 'w') as cat_file:
+            cat_file.write(' '.join(['%d' % v for v in landmarks]))
+    else:
+        raise ValueError
