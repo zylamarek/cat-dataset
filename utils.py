@@ -124,7 +124,8 @@ def crop_and_resize_image(file_path, bounding_box, size, format):
     landmarks[1::2] = [v - bounding_box[0] for v in landmarks[1::2]]
     landmarks[2::2] = [v - bounding_box[1] for v in landmarks[2::2]]
     img = img.crop(bounding_box)
-    img, landmarks = resize_image(img, landmarks, size, Image.LANCZOS)
+    if size is not None:
+        img, landmarks = resize_image(img, landmarks, size, Image.LANCZOS)
 
     if format == 'bmp':
         file_path_bmp = file_path[:-3] + 'bmp'

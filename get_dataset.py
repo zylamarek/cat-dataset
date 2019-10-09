@@ -99,14 +99,14 @@ total = sum([len(l) for l in config['crop'].values()])
 for subdir in config['crop']:
     for filename, bounding_box in config['crop'][subdir].items():
         file_path = os.path.join(clean_path, subdir, filename)
-        crop_and_resize_image(file_path, bounding_box, config['img_size'], 'jpeg')
+        crop_and_resize_image(file_path, bounding_box, None, 'jpeg')
         cnt += 1
         if not cnt % 10:
             percent = cnt / total * 100
             print('\r%.2f%% of %d' % (percent, total), end='')
 print('\r100.00%% of %d' % total)
 
-# Crop images in validation and test datasets for landmarks in ROI detection
+# Crop and resize images in validation and test datasets for landmarks in ROI detection
 print('Cropping and resizing landmarks subsets...')
 cnt = 0
 total = sum([len(l) for l in config['crop_landmarks'].values()])
