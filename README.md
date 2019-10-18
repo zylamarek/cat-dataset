@@ -83,10 +83,10 @@ made by a bounding box prediction algorithm. After sampling the margins, the new
 the resulting image square, while preserving position of the center. If the cropping bounding box extended from the image
 it was filled in black.
 
-On top of that I resized all images in validation and test sets to 224x224 with Lanczos sampling, preserving the aspect ratio
+On top of that I resized all images in the landmark (cropped ROI) validation and test sets to 224x224 with Lanczos sampling,
+preserving the aspect ratio
 and center of the image, adding black border if necessary. Landmark coordinates were rounded
-to the nearest integer. Resized images in landmark (cropped ROI) datasets were saved in BMP format to prevent the JPEG artifacts
-from affecting the results.
+to the nearest integer. Resized images were saved in BMP format to prevent the JPEG artifacts from affecting the results.
 
 ## Links
 

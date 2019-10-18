@@ -93,7 +93,7 @@ for subset in config['split']:
 print('\r100.00%% of %d' % total)
 
 # Crop images in validation and test datasets to obtain uniformly distributed scales
-print('Cropping and resizing subsets...')
+print('Cropping subsets...')
 cnt = 0
 total = sum([len(l) for l in config['crop'].values()])
 for subdir in config['crop']:
