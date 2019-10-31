@@ -1,6 +1,6 @@
 # cat-dataset
 
-Slightly improved cat-dataset for use in cat face landmark prediction models. Dataset consists of cat images with face landmarks annotated.
+Slightly improved cat-dataset for use in cat face landmark prediction models. Dataset consists of cat images with face landmarks annotated. It was created with [this project](https://github.com/zylamarek/frederic) in mind.
 
 Dataset originally created by authors of 
 
@@ -56,7 +56,7 @@ Data in each directory of the original dataset (CAT_00-CAT_06) is slightly corre
 as you can see in the figure below. Therefore I didn't want to mix the data between directories. Instead:
 - CAT_00-CAT_04 - training (7008 ~ 73%)
 - CAT_05 - validation (1267 ~ 13%)  
-- CAT_06 - test (1312 ~ 14%)
+- CAT_06 - test (1295 ~ 14%)
 
 [<img src="./graphics/00000022_009.jpg" width="213">](./graphics/00000022_009.jpg)
 [<img src="./graphics/00000022_010.jpg" width="213">](./graphics/00000022_010.jpg)
